@@ -1,0 +1,77 @@
+programa p4_ej3
+procesos
+  proceso juntarpapeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso etapa5
+  comenzar
+    repetir 4
+      mover
+      juntarpapeles
+  fin
+  proceso barrera(E id:numero)
+  variables
+    listo:boolean
+  comenzar
+    si (id = 1)
+      EnviarMensaje(V,r2)
+      EnviarMensaje(V,r3)
+      RecibirMensaje(listo,r2)
+      RecibirMensaje(listo,r3)
+    sino
+      si (id = 2)
+        EnviarMensaje(V,r3)
+        EnviarMensaje(V,r1)
+        RecibirMensaje(listo,r3)
+        RecibirMensaje(listo,r1)
+      sino
+        EnviarMensaje(V,r1)
+        EnviarMensaje(V,r2)
+        RecibirMensaje(listo,r1)
+        RecibirMensaje(listo,r2)
+  fin
+areas  
+  a1: AreaP(1,1,1,100)
+  a2: AreaP(2,1,2,100)
+  a3: AreaP(3,1,3,100)
+  aj: AreaP(100,100,100,100)
+robots
+  robot recolector
+  variables
+    id:numero
+    ok:boolean
+  comenzar
+    RecibirMensaje(id,jefe)
+    barrera(id)
+    repetir 3
+      juntarpapeles
+      mover
+    juntarpapeles
+    repetir 24
+      barrera(id)
+      etapa5
+  fin
+  robot cordinador
+  variables
+    ok:boolean
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+    
+variables
+  r1,r2,r3: recolector
+  jefe: cordinador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(jefe,aj)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(jefe,100,100)
+fin

@@ -1,0 +1,161 @@
+programa ejercicio
+procesos
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso juntarAmbos
+  comenzar
+    juntarPapeles
+    juntarFlores
+  fin
+  proceso depositar (E id:numero)
+  comenzar
+    si id <3
+      depositarFlor
+    si id >1
+      depositarPapel
+  fin
+  proceso verificarSiHay(E id:numero; ES hay:boolean)
+  comenzar
+    hay:=F
+    si id=1
+      si (HayFlorEnLaBolsa)
+        hay:=V
+    sino
+      si id=2
+        si (HayFlorEnLaBolsa) & (HayPapelEnLaBolsa)
+          hay:=V
+      sino
+        si (HayPapelEnLaBolsa)
+          hay:=V
+  fin
+  proceso ladoR1
+  comenzar
+    repetir 6
+      si (PosCa=8 & PosAv=4)
+        BloquearEsquina(5,8)
+      sino
+        si (PosAv=8 & PosCa=6)
+          BloquearEsquina(8,5)
+      mover
+      si (PosAv=6 & PosCa=8)
+        LiberarEsquina(5,8)
+      sino
+        si (PosAv=8 & PosCa= 4)
+          LiberarEsquina(8,5)
+      juntarFlores
+  fin
+  proceso ladoR2
+  comenzar
+    repetir 10
+      si (PosCa=7 & PosAv=5)
+        BloquearEsquina(5,8)
+      sino
+        si (PosAv=9 & PosCa=5)
+          BloquearEsquina(8,5)
+        sino
+          si (PosAv=8 & PosCa=15)
+            BloquearEsquina(9,15)
+          sino
+            si(PosAv=15 & PosCa=10)
+              BloquearEsquina(15,9)
+      mover
+      si (PosAv=5 & PosCa=9)
+        LiberarEsquina(5,8)
+      sino
+        si (PosAv=9 & PosCa= 5)
+          LiberarEsquina(8,5)
+        sino
+          si (PosAv=10 & PosCa=15)
+            LiberarEsquina(9,15)
+          sino
+            si (PosAv=15 & PosCa=10)
+              LiberarEsquina(15,9)
+      juntarAmbos
+  fin
+  proceso ladoR3
+  comenzar
+    repetir 7
+      si (PosAv=9 & PosCa=14)
+        BloquearEsquina(9,15)
+      sino
+        si (PosAv=16 & PosCa=9)
+          BloquearEsquina(15,9)
+      mover
+      si (PosAv=9 & PosCa=16)
+        LiberarEsquina(9,15)
+      sino
+        si (PosAv=14 & PosCa= 9)
+          LiberarEsquina(15,9)
+      juntarPapeles
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot corredor
+  variables
+    id:numero
+    ca:numero
+    hay:boolean
+  comenzar
+    RecibirMensaje(id,jefe)
+    repetir 4
+      si id= 1
+        ladoR1
+      sino
+        si id=2
+          ladoR2
+        sino
+          ladoR3
+      derecha
+    EnviarMensaje(id,jefe)
+    RecibirMensaje(ca,jefe)
+    Pos(1,ca)
+    derecha
+    verificarSiHay(id,hay)
+    mientras (PosAv < 100) & hay
+      depositar(id)
+      mover
+      verificarSiHay(id,hay)
+  fin
+  robot coordinador
+  variables
+    id,ca:numero
+  comenzar
+    ca:=20
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si id=1
+        EnviarMensaje(ca,r1)
+      sino
+        si id=2
+          EnviarMensaje(ca,r2)
+        sino
+          EnviarMensaje(ca,r3)
+      ca:=ca+1
+  fin
+variables
+  r1:corredor
+  r2:corredor
+  r3:corredor
+  jefe:coordinador
+comenzar
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  AsignarArea(jefe,ciudad)
+  Iniciar(jefe,1,1)
+  Iniciar(r1,2,2)
+  Iniciar(r2,5,5)
+  Iniciar(r3,9,9)
+fin

@@ -1,0 +1,111 @@
+programa ejer
+procesos
+  proceso dejarPapeles(E av:numero; E ca:numero)
+  comenzar
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    repetir 5
+      depositarPapel
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+  fin
+    
+  proceso juntarPapeles(ES cant:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant+1
+      si cant = 5
+        dejarPapeles(PosAv,PosCa)
+        cant:=0
+  fin
+  
+  proceso recorrerAv
+  variables
+    cant: numero
+  comenzar
+    cant:=0
+    repetir 99
+      juntarPapeles(cant)
+      mover
+    juntarPapeles(cant)
+  fin
+  
+  proceso contarPapeles(E cant:numero; ES hay:boolean)
+  variables
+    papelEsq:numero
+  comenzar
+    papelEsq:=0
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papelEsq:=papelEsq+1
+    repetir papelEsq
+      depositarPapel
+    si papelEsq >= cant
+      hay:=V
+    sino
+      hay:=F
+  fin
+  
+  proceso consuPapel(ES intento:numero)
+  variables
+    av,ca,aux:numero
+    hay:boolean
+  comenzar
+    Random(aux,2,5)
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    contarPapeles(aux,hay)
+    si hay
+      repetir aux
+        tomarPapel
+    Pos(av,ca)
+    LiberarEsquina(50,50)
+    si hay
+      intento:=0
+    sino
+      intento:=intento+1
+  fin
+    
+ 
+areas
+  av5: AreaP(5,1,5,100)
+  av10: AreaP(10,1,10,100)
+  a1: AreaP(11,1,11,1)
+  a2: AreaP(12,1,12,1)
+  aD: AreaC(50,50,50,50)
+robots
+  robot productor
+  comenzar
+    recorrerAv
+  fin
+  
+  robot consumidor
+  variables
+    intento:numero
+  comenzar
+    intento:=0
+    mientras intento < 8
+      consuPapel(intento)
+  fin
+variables
+  p1:productor
+  p2:productor
+  c1:consumidor
+  c2:consumidor
+comenzar
+  AsignarArea(p1,aD)
+  AsignarArea(p2,aD)
+  AsignarArea(c1,aD)
+  AsignarArea(c2,aD)
+  AsignarArea(p1,av5)
+  AsignarArea(p2,av10)
+  AsignarArea(c1,a1)
+  AsignarArea(c2,a2)
+  Iniciar(p1,5,1)
+  Iniciar(p2,10,1)
+  Iniciar(c1,11,1)
+  Iniciar(c2,12,1)
+fin 

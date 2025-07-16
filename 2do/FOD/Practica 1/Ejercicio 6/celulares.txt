@@ -1,0 +1,18 @@
+123 23.50 samsung
+12 5 unrecelu
+j4
+456 56 xiaomi
+34 8 remaloeste
+mia3
+123 23.50 samsung
+1 5 unrecelu
+j7
+456 56 xiaomi
+1 8 remaloeste
+mia5
+23 1 iphone
+0 2 asco
+iphone 13
+23 5 samnsung
+0 23 uncelu
+j34

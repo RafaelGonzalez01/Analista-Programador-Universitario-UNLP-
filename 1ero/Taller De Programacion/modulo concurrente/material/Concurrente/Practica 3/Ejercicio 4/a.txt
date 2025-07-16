@@ -1,0 +1,90 @@
+programa ejercicio
+procesos
+  proceso juntarFlor(E miAv:numero; E miCa:numero ;ES termine:boolean)
+  comenzar
+    BloquearEsquina(10,10)
+    Pos(10,10)
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      LiberarEsquina(10,10)
+      depositarFlor
+      Pos(miAv,miCa)
+      LiberarEsquina(11,11)
+    sino
+      Pos(miAv,miCa)
+      LiberarEsquina(10,10)
+      termine:=V
+  fin
+  proceso juntarTodasFlor(E miAv:numero; E miCa:numero)
+  comenzar
+    Pos(11,11)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    Pos(miAv,miCa)
+  fin
+areas
+  aJ: AreaP(1,1,1,1)
+  a1: AreaP(9,9,9,9)
+  a2: AreaP(9,10,9,10)
+  a3: AreaP(9,11,9,11)
+  a4: AreaP(9,12,9,12)
+  aR: AreaPC(10,10,10,10)
+  aD: AreaC(11,11,11,11)
+robots
+  robot recolector
+  variables
+    id,miAv,miCa:numero
+    termine:boolean
+  comenzar
+    RecibirMensaje(id,jefe)
+    miAv:=PosAv
+    miCa:=PosCa
+    termine:=F
+    mientras ~termine
+      juntarFlor(miAv,miCa,termine)
+    EnviarMensaje(id,jefe)
+  fin
+  robot fiscal
+  variables
+    id,miAv,miCa:numero
+  comenzar
+    miAv:=PosAv
+    miCa:=PosCa
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje(id,*)
+    Informar(id)
+    juntarTodasFlor(miAv,miCa)
+  fin
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  r4:recolector
+  jefe:fiscal
+comenzar
+  AsignarArea(jefe,aJ)
+  AsignarArea(jefe,aD)
+  AsignarArea(r1,a1)
+  AsignarArea(r1,aR)
+  AsignarArea(r1,aD)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,aR)
+  AsignarArea(r2,aD)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,aR)
+  AsignarArea(r3,aD)
+  AsignarArea(r4,a4)
+  AsignarArea(r4,aR)
+  AsignarArea(r4,aD)
+  Iniciar(jefe,1,1)
+  Iniciar(r1,9,9)
+  Iniciar(r2,9,10)
+  Iniciar(r3,9,11)
+  Iniciar(r4,9,12)
+fin

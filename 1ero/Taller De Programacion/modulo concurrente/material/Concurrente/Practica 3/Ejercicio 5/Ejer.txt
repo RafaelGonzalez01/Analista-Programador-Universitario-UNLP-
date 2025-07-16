@@ -1,0 +1,99 @@
+programa ejercicio
+procesos
+  proceso agarrarUnPapel(ES hay:boolean)
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    si (HayPapelEnLaEsquina)
+      tomarPapel
+      Pos(av,ca)
+      LiberarEsquina(11,11)
+      mover
+    sino
+      Pos(av,ca)
+      LiberarEsquina(11,11)
+      hay:=F
+  fin
+  proceso recorrido
+  variables
+    hay:boolean
+  comenzar
+    hay:=V
+    mientras ((hay)&(PosCa < 100))
+      agarrarUnPapel(hay)
+  fin
+  proceso actualizarMax(E dist:numero; E id:numero; ES distM:numero; ES idM:numero)
+  comenzar
+    si (dist > distM)
+      distM:=dist
+      idM:=id
+  fin
+areas
+  a1: AreaP(4,1,4,100)
+  a2: AreaP(6,1,6,100)
+  a3: AreaP(8,1,8,100)
+  a4: AreaP(10,1,10,100)
+  aJ: AreaP(1,1,1,1)
+  aD: AreaPC(11,11,11,11)
+robots
+  robot corredor
+  variables
+    id,ca:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    recorrido
+    EnviarMensaje(id,jefe)
+    ca:=PosCa
+    EnviarMensaje(ca,jefe)
+  fin
+  robot coordinador
+  variables
+    id,dist,distM,idM:numero
+  comenzar
+    distM:=-1
+    idM:=0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje(id,*)
+      si id=1
+        RecibirMensaje(dist,r1)
+      sino
+        si id=2
+          RecibirMensaje(dist,r2)
+        sino
+          si id=3
+            RecibirMensaje(dist,r3)
+          sino
+            RecibirMensaje(dist,r4)
+      actualizarMax(dist,id,distM,idM)
+    Informar(idM)
+  fin
+variables
+  r1:corredor
+  r2:corredor
+  r3:corredor
+  r4:corredor
+  jefe:coordinador
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,a4)
+  AsignarArea(jefe,aJ)
+  AsignarArea(r1,aD)
+  AsignarArea(r2,aD)
+  AsignarArea(r3,aD)
+  AsignarArea(r4,aD)
+  Iniciar(jefe,1,1)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,8,1)
+  Iniciar(r4,10,1)
+fin

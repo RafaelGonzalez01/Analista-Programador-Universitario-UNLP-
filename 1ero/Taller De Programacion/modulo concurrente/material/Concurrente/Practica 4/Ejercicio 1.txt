@@ -1,0 +1,140 @@
+programa Ejercicio
+procesos
+
+  proceso juntarFlores (E cant:numero)
+  comenzar
+    repetir cant
+      tomarFlor
+  fin
+  
+  proceso dejarFlores (E cant:numero)
+  comenzar
+    repetir cant
+      depositarFlor
+  fin
+  
+  proceso atras
+  comenzar
+    repetir 2
+      derecha
+    mover
+    repetir 2
+      derecha
+  fin
+  
+  proceso pedirFlores (E id:numero; ES cant:numero)
+  variables
+    aux,av,ca:numero
+    ok:boolean
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    Random(aux,1,4)
+    cant:=aux
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(cant,jefe)
+    EnviarMensaje(av,jefe)
+    EnviarMensaje(ca +1, jefe)
+    RecibirMensaje(ok,jefe)
+    BloquearEsquina(av,ca+1)
+    mover
+    juntarFlores(cant)
+    atras
+    LiberarEsquina(av,ca+1)
+  fin
+  
+  proceso moverse (E cant:numero)
+  comenzar
+    mientras (PosCa <100) & (cant <> 0)
+      depositarFlor
+      mover
+      cant:= cant -1
+  fin
+  
+  proceso enviarFlores(E id:numero)
+  variables
+    av,ca,cant: numero
+  comenzar
+    si id=1
+      RecibirMensaje(cant,r1)
+      RecibirMensaje(av,r1)
+      RecibirMensaje(ca,r1)
+    sino
+      si id=2
+        RecibirMensaje(cant,r2)
+        RecibirMensaje(av,r2)
+        RecibirMensaje(ca,r2)
+      sino
+        RecibirMensaje(cant,r3)
+        RecibirMensaje(av,r3)
+        RecibirMensaje(ca,r3)
+    BloquearEsquina(av,ca)
+    Pos(av,ca)
+    dejarFlores(cant)
+    Pos(100,100)
+    LiberarEsquina(av,ca)
+    si id=1
+      EnviarMensaje(V,r1)
+    sino
+      si id=2
+        EnviarMensaje(V,r2)
+      sino
+        EnviarMensaje(V,r3)
+  fin
+  
+areas
+  aJ: AreaP(100,100,100,100)
+  a1: AreaP(1,1,1,1)
+  a2: AreaP(2,1,2,1)
+  a3: AreaP(3,1,3,1)
+  reco1: AreaPC (1,2,1,100)
+  reco2: AreaPC (2,2,2,100)
+  reco3: AreaPC (3,2,3,100)
+robots
+  robot cliente
+  variables
+    id, cant: numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    mientras (PosCa < 100)
+      pedirFlores(id,cant)
+      moverse(cant)
+    EnviarMensaje(0,jefe)
+  fin  
+  
+  robot servidor
+  variables
+    terminados,id:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    terminados:=0
+    mientras (terminados < 3)
+      RecibirMensaje(id,*)
+      si id <> 0
+        enviarFlores(id)
+      sino
+        terminados:= terminados +1
+  fin
+variables
+  jefe: servidor
+  r1:cliente
+  r2:cliente
+  r3:cliente
+comenzar
+  AsignarArea(jefe,aJ)
+  AsignarArea(jefe,reco1)
+  AsignarArea(jefe,reco2)
+  AsignarArea(jefe,reco3)
+  AsignarArea(r1,a1)
+  AsignarArea(r1,reco1)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,reco2)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,reco3)
+  Iniciar(jefe,100,100)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+fin     

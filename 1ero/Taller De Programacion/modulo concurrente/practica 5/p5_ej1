@@ -1,0 +1,108 @@
+programa ejemplo
+procesos
+  proceso recolectarflores(ES cant:numero)  
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant + 1
+  fin
+  proceso recolectarpapeles(ES cant:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarFlor
+      cant:= cant+1
+  fin
+  proceso recorreravenida(ES cant:numero)
+  comenzar
+    repetir 96
+      recolectarflores(cant)
+      mover
+    recolectarflores(cant)
+    repetir 2
+      BloquearEsquina(PosAv,PosCa+1)
+      mover
+      recolectarflores(cant)
+    LiberarEsquina(PosAv,PosCa-1)     
+    mover
+    LiberarEsquina(PosAv,PosCa-1)
+    recolectarflores(cant)
+  fin
+  proceso recorrercalle(ES cant:numero)
+  comenzar
+    repetir 2
+      recolectarpapeles(cant)
+      BloquearEsquina(PosAv+1,PosCa)
+      mover
+    repetir 2
+      recolectarpapeles(cant)
+      LiberarEsquina(PosAv-1,PosCa)
+      mover
+    repetir 94
+      recolectarpapeles(cant)
+      mover
+    recolectarpapeles(cant)
+  fin 
+    
+    
+    
+    
+  
+      
+      
+      
+      
+    
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot recolectorpapeles
+  variables
+    id,cant: numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    derecha
+    recorrercalle(cant)
+    EnviarMensaje(cant,jefe)
+  fin
+  robot recolectorflores
+  variables
+    id,cant:numero
+  comenzar
+    RecibirMensaje(id,jefe)
+    recorreravenida(cant)
+    EnviarMensaje(cant,jefe)
+  robot fiscalizador
+  variables
+    cantf,cantp,aux: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,a1)
+    EnviarMensaje(4,a2)
+    RecibirMensaje(cantf,r1)
+    RecibirMensaje(aux,r2)
+    cantf:=cantf + aux
+    RecibirMensaje(cantp,a1)
+    RecibirMensaje(aux,a2)
+    cantp:=cantp + aux
+    si (cantf > cantp)
+      Informar('gano el equipo recolector de flores')
+    sino
+      Informar('gano el equipo recolector de papeles')
+  fin
+variables
+  r1,r2: recolectorflores
+  a1,a2: recolectorpapeles
+  jefe: fiscalizador
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(a1, ciudad)
+  AsignarArea(a2, ciudad)
+  AsignarArea(jefe, ciudad)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(a1,1,98)
+  Iniciar(a2,1,99)
+  Iniciar(jefe,1,1)
+fin

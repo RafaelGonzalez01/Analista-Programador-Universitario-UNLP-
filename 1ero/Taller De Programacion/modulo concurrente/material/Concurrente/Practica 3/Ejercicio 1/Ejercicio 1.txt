@@ -1,0 +1,104 @@
+programa ejercicio
+procesos
+  proceso juntarFlores(E miAv:numero; E miCa:numero; ES flores:numero)
+  variables
+    rAv,rCa: numero
+  comenzar
+    Random(rAv,1,5)
+    Random(rCa,1,10)
+    BloquearEsquina(rAv,rCa)
+    Pos(rAv,rCa)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores+1
+    Pos(miAv,miCa)
+    LiberarEsquina(rAv,rCa)
+  fin
+  proceso juntarPapeles(E miAv:numero; E miCa:numero; ES papeles:numero)
+  variables
+    rAv,rCa: numero
+  comenzar
+    Random(rAv,6,10)
+    Random(rCa,1,9)
+    BloquearEsquina(rAv,rCa)
+    Pos(rAv,rCa)
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles+1
+    Pos(miAv,miCa)
+    LiberarEsquina(rAv,rCa)
+  fin
+  proceso dejarFlores(E miAv:numero; E miCa:numero; E flores:numero)
+  comenzar
+    repetir flores
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(miAv,miCa)
+      LiberarEsquina(10,10)
+  fin
+  proceso dejarPapeles(E miAv:numero; E miCa:numero; E papeles:numero)
+  comenzar
+    repetir papeles
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarPapel
+      Pos(miAv,miCa)
+      LiberarEsquina(10,10)
+  fin
+areas
+  aFloreros: AreaPC(1,1,5,10)
+  aPapeleros: AreaPC(6,1,10,9)
+  a1: AreaP(6,10,6,10)
+  a2: AreaP(7,10,7,10)
+  a3: AreaP(8,10,8,10)
+  a4: AreaP(9,10,9,10)
+  aD: AreaC(10,10,10,10)
+robots
+  robot florero
+  variables
+    flores:numero
+    miAv,miCa:numero
+  comenzar
+    miAv:= PosAv
+    miCa:=PosCa
+    flores:=0
+    repetir 5
+      juntarFlores(miAv,miCa,flores)
+    dejarFlores(miAv,miCa,flores)
+  fin
+  robot papelero
+  variables
+    papeles:numero
+    miAv,miCa:numero
+  comenzar
+    miAv:= PosAv
+    miCa:=PosCa
+    papeles:=0
+    repetir 5
+      juntarPapeles(miAv,miCa,papeles)
+    dejarPapeles(miAv,miCa,papeles)
+  fin
+variables
+  f1:florero
+  f2:florero
+  p1:papelero
+  p2:papelero
+comenzar
+  AsignarArea(f1,aFloreros)
+  AsignarArea(f1,a1)
+  AsignarArea(f2,aFloreros)
+  AsignarArea(f2,a2)
+  AsignarArea(p1,aPapeleros)
+  AsignarArea(p1,a3)
+  AsignarArea(p2,aPapeleros)
+  AsignarArea(p2,a4)
+  AsignarArea(f1,aD)
+  AsignarArea(f2,aD)
+  AsignarArea(p1,aD)
+  AsignarArea(p2,aD)
+  Iniciar(f1,6,10)
+  Iniciar(f2,7,10)
+  Iniciar(p1,8,10)
+  Iniciar(p2,9,10)
+fin
