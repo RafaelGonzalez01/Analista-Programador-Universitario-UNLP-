@@ -1,9 +1,7 @@
 package main
 
-import (
-	"fmt"
-)
+var canal = make(chan int, 3)
 
-func (){
-	
+func main() {
+
 }
